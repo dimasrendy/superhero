@@ -1,23 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import FavoriteDetail from './components/FavoriteDetail';
+import FavoriteHero from './components/FavoriteHero';
+import Home from './components/Home';
+import Navbar from './components/Navbar';
+import { Container } from './components/styled/Container.styled';
+import GlobalStyles from './components/styled/Global';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <GlobalStyles />
+        <Navbar />
+        <Container>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/favorite/details/:name" element={<FavoriteDetail />} />
+            <Route path="/favorite" element={<FavoriteHero />} />
+          </Routes>
+        </Container>
+      </BrowserRouter>
     </div>
   );
 }
