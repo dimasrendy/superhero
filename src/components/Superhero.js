@@ -1,10 +1,13 @@
 import { SuperheroStyled, SectionContainer, Section, Overview } from "./styled/Superhero.styled";
 import { Button } from "./styled/Button.styled";
 
-const Superhero = ({ superhero }) => {
+const Superhero = ({ superhero, isError, addFavorite }) => {
+    
     return (
+        <>
+        {isError === 'error' && "Not Found"}
+        {superhero && superhero.map(hero => (
 
-        superhero && superhero.map(hero => (
             (<SuperheroStyled key={hero.id}>
                 <Overview>
                     <div className="avatar">
@@ -47,6 +50,10 @@ const Superhero = ({ superhero }) => {
                         <div className="details">
                             <label>Intelligence</label>
                             <p>{hero.powerstats.intelligence}</p>
+                        </div>
+                        <div className="details">
+                            <label>Power</label>
+                            <p>{hero.powerstats.power}</p>
                         </div>
                         <div className="details">
                             <label>Speed</label>
@@ -114,11 +121,13 @@ const Superhero = ({ superhero }) => {
                         </div>
                     </Section>
                 </SectionContainer>
-                <Button backgroundColor='#FFE162'>Add to Favorite</Button>
+                <Button backgroundColor='#FFE162' onClick={(e) => {
+                    addFavorite(e, hero)
+                }}>Add to Favorite</Button>
             </SuperheroStyled>
             )
-        ))
-
+        ))}
+        </>
     );
 }
 
