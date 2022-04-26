@@ -16,4 +16,8 @@ export const StyledNavbar = styled.nav`
         text-decoration: none;
     }
 
+    .favorite-hero a {
+        margin-left: 1rem;
+    }
+
 `

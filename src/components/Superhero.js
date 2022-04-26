@@ -5,7 +5,7 @@ const Superhero = ({ superhero, isError, addFavorite }) => {
     
     return (
         <>
-        {isError === 'error' && "Not Found"}
+        {isError === 'error' && "Hero not Found"}
         {superhero && superhero.map(hero => (
 
             (<SuperheroStyled key={hero.id}>

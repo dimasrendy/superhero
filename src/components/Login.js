@@ -1,52 +1,69 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
+import { Button } from "./styled/Button.styled";
+import { Centering, FrontContainer, FrontCard } from "./styled/Register.styled";
+import Axios from 'axios';
 
 const Login = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const navigate = useNavigate();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-    const [loginStatus, setLoginStatus] = useState('');
+  const [loginStatus, setLoginStatus] = useState(false);
 
-    const login = () => {
-        fetch('http://localhost:3001/login', {
-            method: 'POST',
-            headers: { "Content-type": "application/json" },
-            body: JSON.stringify({
-                username: username,
-                password: password
-            })
-        }).then((response) => {
-            console.log(response);
+  const login = e => {
+    e.preventDefault();
+    Axios.post('http://localhost:3001/login', {
+      username: username,
+      password: password,
+    }).then((response) => {
+      if (!response.data.auth) {
+        setLoginStatus(false);
+      } else {
+        setLoginStatus(true);
+        localStorage.setItem('token', response.data.token)
+        navigate('/');
+      }
+    });
+  };
 
-            // if (response.data.message) {
-            //     setLoginStatus(response.data.message);
-            // } else {
-            //     setLoginStatus(response.data[0].username);
-            // }
-
-            // alert('login success');
-            // navigate('/home');
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      Axios.get('http://localhost:3001/isUserAuth', {
+        headers: {
+          'authorization': localStorage.getItem('token'),
+        }
+      })
+        .then((response) => {
+          if (response.data.auth === true) {
+            navigate('/');
+          }
         })
-    };
+        .catch(err => {
+          console.log(err);
+        })
+    }
+  }, [])
 
-    return (
-        <div className="front-container">
-            <h1>Login</h1>
+  return (
+    <Centering>
+      <FrontContainer>
+        <h2>Login</h2>
 
-            <div className="card">
-                <input type="text" placeholder="username" onChange={(e) => { setUsername(e.target.value) }} />
-                <input type="password" placeholder="password" onChange={(e) => { setPassword(e.target.value) }} />
+        <FrontCard>
+          <form>
+            <input type="text" placeholder="Username" onChange={(e) => { setUsername(e.target.value) }} />
+            <input type="password" placeholder="Password" autoComplete="" onChange={(e) => { setPassword(e.target.value) }} />
 
-                <button onClick={login}>Login</button>
-                
-            </div>
+            <Button backgroundColor='#00B4CC' onClick={login}>Login</Button>
+          </form>
 
-            <h1>{loginStatus}</h1>
+        </FrontCard>
 
-            <p>Don't have an account? <Link to={'/'}>Register</Link></p>
-        </div>
-    );
+        <p>Don't have an account? <Link to={'/register'}>Register</Link></p>
+      </FrontContainer>
+    </Centering>
+  );
 }
- 
+
 export default Login;

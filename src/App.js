@@ -7,22 +7,23 @@ import Login from './components/Login';
 import { Container } from './components/styled/Container.styled';
 import GlobalStyles from './components/styled/Global';
 import Register from './components/Register';
+import AuthenticatedLayout from './components/AuthenticatedLayout';
 
 function App() {
   return (
     <div className="App">
+      <GlobalStyles />
       <BrowserRouter>
-        <GlobalStyles />
-        <Navbar />
-        <Container>
-          <Routes>
-            <Route path="/" element={<Register />} /> 
+        <Routes>
+            <Route path='/register' element={<Register />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/home" element={<Home />} />
+
+          <Route path="/" element={<AuthenticatedLayout />} >
+            <Route index element={<Home />} />
             <Route path="/favorite" element={<FavoriteHero />} />
             <Route path="/favorite/:hero_id" element={<FavoriteDetail />} />
-          </Routes>
-        </Container>
+          </Route>
+        </Routes>
       </BrowserRouter>
     </div>
   );
